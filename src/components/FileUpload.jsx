@@ -13,11 +13,11 @@ const FileUpload = ({ onFileUpload }) => {
   const handleFileUpload = async () => {
     if (file) {
       const formData = new FormData();
-      formData.append("file", file); // Ensure the key matches the server's expectation
+      formData.append("file", file);
 
       try {
         const response = await axios.post(
-          "http://4.227.155.222:8090/generate_mcqs/", // Corrected endpoint
+          "/api/generate_mcqs/",
           formData,
           {
             headers: {
@@ -26,12 +26,13 @@ const FileUpload = ({ onFileUpload }) => {
           }
         );
 
+        console.log("Server response:", response.data);
         onFileUpload(response.data);
       } catch (error) {
         console.error("Error uploading file", error);
       }
     } else {
-      console.log("no file");
+      console.log("No file selected");
     }
   };
 
