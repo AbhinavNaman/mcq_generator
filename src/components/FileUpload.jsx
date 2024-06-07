@@ -10,6 +10,10 @@ const FileUpload = ({ onFileUpload }) => {
     setFileName(e.target?.files[0] ? e.target?.files[0].name : "file");
   };
 
+  const API_BASE_URL = process.env.NODE_ENV === 'production'
+  ? 'https://mcq-generator-phi.vercel.app/api'
+  : '/api';
+
   const handleFileUpload = async () => {
     if (file) {
       const formData = new FormData();
@@ -17,7 +21,7 @@ const FileUpload = ({ onFileUpload }) => {
 
       try {
         const response = await axios.post(
-          "/api/generate_mcqs/",
+          `${API_BASE_URL}/generate_mcqs/`,
           formData,
           {
             headers: {
