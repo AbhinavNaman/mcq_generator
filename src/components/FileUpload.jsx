@@ -1,6 +1,4 @@
 import React, { useState } from "react";
-import { FileInput } from "@mantine/core";
-import { Button } from "@mantine/core";
 import axios from "axios";
 
 const FileUpload = ({ onFileUpload }) => {
@@ -8,30 +6,30 @@ const FileUpload = ({ onFileUpload }) => {
   const [fileName, setFileName] = useState("Choose a file");
 
   const handleFileChange = (e) => {
-    console.log("inside handlefile upload");
     setFile(e.target?.files[0]);
-    console.log(file);
     setFileName(e.target?.files[0] ? e.target?.files[0].name : "file");
   };
 
   const handleFileUpload = async () => {
-    console.log("button clicked");
     if (file) {
       const formData = new FormData();
-      formData.append("pdf", file);
+      formData.append("file", file); // Ensure the key matches the server's expectation
 
-      // http://localhost:5000/upload
-      const response = await axios.post(
-        "http://4.227.155.222:8090/docs",
-        formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        }
-      );
+      try {
+        const response = await axios.post(
+          "http://4.227.155.222:8090/generate_mcqs/", // Corrected endpoint
+          formData,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          }
+        );
 
-      onFileUpload(response.data);
+        onFileUpload(response.data);
+      } catch (error) {
+        console.error("Error uploading file", error);
+      }
     } else {
       console.log("no file");
     }
@@ -39,7 +37,6 @@ const FileUpload = ({ onFileUpload }) => {
 
   return (
     <div style={{ marginBottom: "20px" }}>
-
       <div style={{ position: "relative", display: "inline-block" }}>
         <input
           type="file"
@@ -58,7 +55,6 @@ const FileUpload = ({ onFileUpload }) => {
             color: "#333",
             fontWeight: "bold",
             cursor: "pointer",
-            // Add more inline styles as needed
           }}
         >
           Choose File
@@ -78,7 +74,6 @@ const FileUpload = ({ onFileUpload }) => {
           color: "#333",
           fontWeight: "bold",
           cursor: "pointer",
-          // Add more inline styles as needed
         }}
       >
         Generate MCQs
