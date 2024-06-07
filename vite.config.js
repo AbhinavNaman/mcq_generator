@@ -6,11 +6,6 @@ export default defineConfig({
   optimizeDeps: {
     include: ['papaparse'], // Ensure papaparse is included in the optimized dependencies
   },
-  build: {
-    rollupOptions: {
-      external: ['papaparse'], // Externalize the papaparse module
-    },
-  },
   server: {
     proxy: {
       '/api': {
