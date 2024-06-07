@@ -1,11 +1,9 @@
+// vite.config.js
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 
 export default defineConfig({
   plugins: [react()],
-  optimizeDeps: {
-    include: ['papaparse'], // Ensure papaparse is included in the optimized dependencies
-  },
   server: {
     proxy: {
       '/api': {
