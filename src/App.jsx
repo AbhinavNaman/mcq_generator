@@ -9,7 +9,8 @@ import FileUpload from "./components/FileUpload";
 import MCQDisplay from "./components/MCQDisplay";
 import DownloadCSV from "./components/DownloadCSV";
 
-import { parse, unparse } from "papaparse";
+import Papa from 'papaparse';
+
 
 function App() {
   const [mcqs, setMcqs] = useState([]);
@@ -22,19 +23,22 @@ function App() {
     setCsvData(convertToCSV(data));
   };
 
-  const convertToCSV = (mcqs) => {
-    // Flattening the JSON structure if needed
-    const mcqsArray = Object.values(mcqs);
-    const flatData = mcqsArray.map(item => ({
-      mcq: item.mcq,
-      options: Object.values(item.options).join(', '),
-      correct: item.correct,
-      taxonomy: item["Bloom's Taxonomy"]
-    }));
-  
-    // Convert to CSV using `papaparse`
-    return unparse(flatData);
-  };
+const convertToCSV = (mcqs) => {
+  if (!Array.isArray(mcqs)) {
+    console.error("Expected an array of MCQs, but received:", mcqs);
+    return "";
+  }
+
+  const flatData = mcqs.map((item) => ({
+    mcq: item.mcq,
+    options: Object.values(item.options).join(", "),
+    correct: item.correct,
+    taxonomy: item["Bloom's Taxonomy"],
+  }));
+
+  return Papa.unparse(flatData);
+};
+
 
   const handleDownloadCSV = () => {
     const blob = new Blob([csvData], { type: "text/csv;charset=utf-8;" });
